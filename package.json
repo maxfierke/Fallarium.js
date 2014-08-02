@@ -1,0 +1,32 @@
+{
+  "name": "fallarium",
+  "version": "0.1.0",
+  "description": "Falling blocks game that emulates hallucinogenic effects while you're playing. Inspired by Damian Yerrick's Tetanus on Drugs.",
+  "main": "src/fallarium.js",
+  "private": true,
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-connect": "^0.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxfierke/Fallarium.js.git"
+  },
+  "keywords": [
+    "falling",
+    "blocks",
+    "game",
+    "tetanus",
+    "hallucinogen"
+  ],
+  "author": "Max Fierke <max@maxfierke.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/maxfierke/Fallarium.js/issues"
+  },
+  "homepage": "https://github.com/maxfierke/Fallarium.js"
+}

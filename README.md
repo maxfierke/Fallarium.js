@@ -6,5 +6,15 @@ Fallarium.js is a game inspired by Damian Yerrick's Tetanus On Drugs(TM). It is 
 ## Why?!?
 I played a lot of Tetanus on Drugs(TM) when I was younger, mainly the GBA port. I recently rediscovered my love for it and want to make it available to users of modern computers and those without GBA flashcarts. The original version of the game (non-GBA) was written over 10 years ago for computers much less powerful. I was initially going to update the PC version, but after sitting on it and doing nothing for two years, I've decided to remake it for the web.
 
+## Development Dependencies
+* [npm](http://npmjs.org/)
+* [bower](http://bower.io/)
+
+## Setup
+* `$ git clone https://github.com/maxfierke/Fallarium.js.git fallarium.js`
+* `$ cd fallarium.js && bower install && npm install`
+* `$ grunt connect`
+* [Open it in your web browser](http://localhost:8001)
+
 # License
 Fallarium.js is licensed under the Apache License version 2.0. See LICENSE for the full text.
