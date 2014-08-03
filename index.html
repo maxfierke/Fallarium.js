@@ -3,22 +3,31 @@
 <head>
 	<title>Fallarium</title>
 	<script src="bower_components/phaser-official/build/phaser.min.js"></script>
+	<script src="src/fallarium.block.js"></script>
+	<script src="src/fallarium.menus.js"></script>
+	<script src="src/fallarium.game.js"></script>
 	<script src="src/fallarium.js"></script>
+	<style type="text/css">
+		* { -moz-box-sizing: border-box; box-sizing: border-box;}
+		.container,
+		#fallarium canvas {
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 1200px;
+		}
+	</style>
 </head>
 <body>
-	<header>
-		<h1>
-			Fallarium
-		</h1>
-	</header>
-	<div id="fallarium">
-		<!-- Game gets injected here -->
+	<div class="container">
+		<div id="fallarium">
+			<!-- Game gets injected here -->
+		</div>
+		<footer>
+			<small>Copyright &copy; 2014 Max Fierke &amp; John Anderson</small>
+		</footer>
 	</div>
-	<footer>
-		Copyright &copy; 2014 Max Fierke &amp; John Anderson
-	</footer>
 	<script>
-		fallarium.init(Phaser, 800, 600);
+		fallarium.init(Phaser);
 	</script>
 </body>
 </html>
