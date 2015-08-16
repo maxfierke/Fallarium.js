@@ -58,7 +58,7 @@ var FallariumWinStage = function(game, context) {
 			this.game.world.bounds.y = 0;
 			this.game.world.bounds.width = context.width;
 			this.game.world.bounds.height = context.height;
-			this.winimage = this.game.add.sprite(0,0,'win');
+			this.winimage = this.game.add.sprite(this.game.world.centerX,0,'win');
 			this.playbutton = this.add.button(this.game.world.centerX, 500, 'play',this.playclicked,this,1,0,2);
 			this.playbutton.anchor.setTo(0.5,0.5);
 			this.tweenplay = this.game.add.tween(this.playbutton).to({y:550},1000,context.Phaser.Easing.Sinusoidal.InOut,true,0,100,true);

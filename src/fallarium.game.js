@@ -1,10 +1,15 @@
 var FallariumGameStage = function (game, context) {
 	this.currentlevel;
+	this.boardLayer;
 
-	var context = context;
+	var Phaser = context.Phaser;
+	var bgfilter;
 	var oldsquares = new Array();
 	var squaresinrow = new Array();
 	var change_rot_time = 0;
+	var scaleMorph = null;
+	var rotMorph = null;
+	var next_morph = 0;
 	var force_down = 0;
 	var slide_time = 0;
 	var KEYLEFT;
@@ -14,33 +19,60 @@ var FallariumGameStage = function (game, context) {
 
 	return {
 		create: function() {
-			this.bck = this.game.add.sprite(0,0,'bck');
-			this.game.world.x = 0;
-			this.game.world.y = 0;
-			this.game.world.bounds.x = 21;
-			this.game.world.bounds.y = 0;
-			this.game.world.bounds.width = 280;
-			this.game.world.bounds.height = 590;
-			this.logo = this.game.add.sprite(295,30,'logo');
-			this.focusblock = new FallariumBlock(this.game, context, this.game.world.centerX,-40,this.chooseBlock(),this.chooseColor(),1);
+			this.background = game.add.image(0, 0);
+			this.background.width = context.width;
+			this.background.height = context.height;
+
+			bgfilter = game.add.filter('Psychedelix', context.width, context.height, 0.5);
+			bgfilter2 = game.add.filter('Hypnosis', context.width, context.height, 0.5);
+			bgfilter.alpha = 0.5;
+			bgfilter2.alpha = 0.5;
+
+			this.boardLayer = game.add.group();
+			this.detailsLayer = game.add.group();
+
+			this.game.world.filters = [bgfilter];
+			this.boardLayer.x = Math.floor(this.game.world.width / 8);
+			this.boardLayer.y = 0;
+			this.boardLayer.boardWidth = 280;
+			this.boardLayer.boardHeight = 590;
+			this.boardLayer.centerX = Math.floor(this.boardLayer.x + (this.boardLayer.boardWidth / 2));
+			this.boardLayer.centerY = Math.floor(this.boardLayer.y + (this.boardLayer.boardHeight / 2));
+			this.boardLayer.pivot.x = 10;
+			this.boardLayer.pivot.y = 10;
+
+			//this.boardLayer.filters = [bgfilter2];
+
+			this.bck = this.boardLayer.add(new Phaser.Sprite(this.game, this.boardLayer.x, this.boardLayer.y, 'bck'));
+			this.bck.alpha = 0.6;
+			this.bck.collideWorldBounds = true;
+
+			this.game.world.bounds.x = this.boardLayer.x + 21;
+			this.game.world.bounds.y = this.boardLayer.y + 0;
+			this.game.world.bounds.width = this.boardLayer.x + this.boardLayer.boardWidth;
+			this.game.world.bounds.height = this.boardLayer.y + this.boardLayer.boardHeight;
+
+			this.logo = this.detailsLayer.add(new Phaser.Sprite(this.game, 295, 30, 'logo'));
+
+			this.focusblock = new FallariumBlock(this.game, this.boardLayer, context, this.boardLayer.centerX, this.boardLayer.y-40, this.chooseBlock(), this.chooseColor(), 1);
 			this.nextblocktype = this.chooseBlock();
 			this.nextblockcolor = this.chooseColor();
-			this.nextblock = new FallariumBlock(this.game, context, 330, 271,this.nextblocktype,this.nextblockcolor,0.7);
+			this.nextblock = new FallariumBlock(this.game, this.boardLayer, context, this.boardLayer.x + 330, this.boardLayer.y + 271, this.nextblocktype, this.nextblockcolor, 0.7);
 
 			KEYRIGHT = this.game.input.keyboard.addKey(context.Phaser.Keyboard.RIGHT);
 			KEYLEFT = this.game.input.keyboard.addKey(context.Phaser.Keyboard.LEFT);
 			KEYUP = this.game.input.keyboard.addKey(context.Phaser.Keyboard.UP);
 			KEYDOWN = this.game.input.keyboard.addKey(context.Phaser.Keyboard.DOWN);
 
-			this.scoretext = this.add.text(344,355,"SCORE",{ font: "15px Arial", fill: "#ff0044", align: "center" });
-			this.scoretext.anchor.setTo(0.5,0.5);
-			this.scoretextmain = this.add.text(344,370," "+context.score+" ",{ font: "15px Arial", fill: "#fff", align: "center" })
-			this.resetbutton = this.add.sprite(320,520,'reset');
-			this.pausebutton = this.add.sprite(320,460,'pause');
+			this.scoretext = this.detailsLayer.add(new Phaser.Text(this.game, 344, 355, "SCORE", { font: "15px Arial", fill: "#ff0044", align: "center" }));
+			this.scoretext.anchor.setTo(0.5, 0.5);
+			this.scoretextmain = this.detailsLayer.add(new Phaser.Text(this.game, 344, 370, context.score.toString(), { font: "15px Arial", fill: "#fff", align: "center" }));
+			this.resetbutton = this.detailsLayer.add(new Phaser.Sprite(this.game, 320, 520, 'reset'));
+			this.pausebutton = this.detailsLayer.add(new Phaser.Sprite(this.game, 320, 460, 'pause'));
 			this.pausebutton.inputEnabled = true;
 			this.resetbutton.inputEnabled = true;
-			this.pausebutton.events.onInputDown.add(this.onPauseButtonDown,this.pausebutton);
-			this.resetbutton.events.onInputDown.add(this.onResetButtonDown,this.resetbutton);
+			this.pausebutton.events.onInputDown.add(this.onPauseButtonDown, this.pausebutton);
+			this.resetbutton.events.onInputDown.add(this.onResetButtonDown, this.resetbutton);
 			oldsquares.length = 0;
 			squaresinrow.length = 0;
 			context.score = 0;
@@ -109,6 +141,9 @@ var FallariumGameStage = function (game, context) {
 			}
 		},
 		update: function() {
+			bgfilter.update();
+			bgfilter2.update();
+
 			if (this.game.time.now > force_down) {
 				if (!this.focusblock.wallCollide(oldsquares,'down')) {
 					this.focusblock.move('down');
@@ -116,14 +151,14 @@ var FallariumGameStage = function (game, context) {
 					for (var i = 0; i < 4; i++) {
 						oldsquares.push(this.focusblock.squares[i]);
 					}
-					this.focusblock = new FallariumBlock(this.game, context, this.game.world.centerX,-40,this.nextblocktype,this.nextblockcolor,1);
+					this.focusblock = new FallariumBlock(this.game, this.boardLayer, context, this.boardLayer.centerX, this.boardLayer.y-40, this.nextblocktype, this.nextblockcolor, 1);
 					this.nextblocktype = this.chooseBlock();
 					this.nextblockcolor = this.chooseColor();
 
 					for (var i = 0; i < 4; i++) {
 						this.nextblock.squares[i].destroy();
 					}
-					this.nextblock = new FallariumBlock(this.game, context, 330, 271,this.nextblocktype,this.nextblockcolor,0.7);
+					this.nextblock = new FallariumBlock(this.game, this.boardLayer, context, this.boardLayer.x + 330, this.boardLayer.y + 271, this.nextblocktype, this.nextblockcolor, 0.7);
 					if (this.focusblock.wallCollide(oldsquares,'down')) {
 						this.game.state.start('Lose');
 					}
@@ -171,6 +206,26 @@ var FallariumGameStage = function (game, context) {
 			} else {
 				context.forceDownMaxTime = 500;
 			}
+
+
+			if (this.game.time.now > next_morph) { // Time for the next morph set?
+
+				var sign = parseInt(Math.random() * 10) % 2 ? -1 : 1;
+				var scaleFactor = (sign * Math.random()) * (1.2 - 0.9) + 0.9;
+
+				if (scaleMorph === null || (scaleMorph && !scaleMorph.isRunning)) { // Did the last scale tween finish yet?
+					//scaleMorph = this.game.add.tween(this.boardLayer.scale).to({x: scaleFactor, y: scaleFactor}, Math.random() * 5000, Phaser.Easing.Back.InOut, true, Math.random() * 100);
+				}
+
+				if (rotMorph === null || (rotMorph && !rotMorph.isRunning)) { // Did the last rotate tween finish yet?
+					rotMorph = this.game.add.tween(this.boardLayer).to({rotation: this.boardLayer.angle * (sign * Math.random() * 360 * (0.10 - 0.02) + 0.02)}, Math.random() * 13000, Phaser.Easing.Linear.None, true, Math.random() * 100);
+				}
+
+				next_morph = this.game.time.now + 1000;
+			}
+		},
+		render: function () {
+
 		}
 	};
 };

@@ -1,5 +1,6 @@
-var FallariumBlock = function(game, context, x, y, type, color, scale) {
+var FallariumBlock = function(game, group, context, x, y, type, color, scale) {
 	this.context = context;
+	this.group = group;
 	this.width = this.context.blockWidth;
 	this.height = this.context.blockHeight;
 	this.md = this.width / 2;
@@ -15,57 +16,58 @@ var FallariumBlock = function(game, context, x, y, type, color, scale) {
 
 FallariumBlock.prototype = {
 	setupSquares: function() {
+		var Sprite = this.context.Phaser.Sprite;
 		this.squares.length = 0;
 
 		switch (this.blocktype) {
 
 			case 'o':
-				this.squares[0] = this.game.add.sprite(this.centerX - this.md, this.centerY - this.md, 'blocks', this.blockcolor);
-				this.squares[1] = this.game.add.sprite(this.centerX - this.md, this.centerY + this.md, 'blocks', this.blockcolor);
-				this.squares[2] = this.game.add.sprite(this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor);
-				this.squares[3] = this.game.add.sprite(this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor);
+				this.squares[0] = this.group.add(new Sprite(this.game, this.centerX - this.md, this.centerY - this.md, 'blocks', this.blockcolor));
+				this.squares[1] = this.group.add(new Sprite(this.game, this.centerX - this.md, this.centerY + this.md, 'blocks', this.blockcolor));
+				this.squares[2] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor));
+				this.squares[3] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor));
 				break;
 
 			case 't':
-				this.squares[0] = this.game.add.sprite(this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor);
-				this.squares[1] = this.game.add.sprite(this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor);
-				this.squares[2] = this.game.add.sprite(this.centerX - this.md, this.centerY + this.md, 'blocks', this.blockcolor);
-				this.squares[3] = this.game.add.sprite(this.centerX + this.md * 3, this.centerY + this.md, 'blocks', this.blockcolor);
+				this.squares[0] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor));
+				this.squares[1] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor));
+				this.squares[2] = this.group.add(new Sprite(this.game, this.centerX - this.md, this.centerY + this.md, 'blocks', this.blockcolor));
+				this.squares[3] = this.group.add(new Sprite(this.game, this.centerX + this.md * 3, this.centerY + this.md, 'blocks', this.blockcolor));
 				break;
 
 		    case 'l':
-				this.squares[0] = this.game.add.sprite(this.centerX - this.md, this.centerY - this.md, 'blocks', this.blockcolor);
-				this.squares[1] = this.game.add.sprite(this.centerX - this.md, this.centerY + this.md, 'blocks', this.blockcolor);
-				this.squares[2] = this.game.add.sprite(this.centerX - this.md, this.centerY + this.md * 3, 'blocks', this.blockcolor);
-				this.squares[3] = this.game.add.sprite(this.centerX + this.md, this.centerY + this.md * 3, 'blocks', this.blockcolor);
+				this.squares[0] = this.group.add(new Sprite(this.game, this.centerX - this.md, this.centerY - this.md, 'blocks', this.blockcolor));
+				this.squares[1] = this.group.add(new Sprite(this.game, this.centerX - this.md, this.centerY + this.md, 'blocks', this.blockcolor));
+				this.squares[2] = this.group.add(new Sprite(this.game, this.centerX - this.md, this.centerY + this.md * 3, 'blocks', this.blockcolor));
+				this.squares[3] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY + this.md * 3, 'blocks', this.blockcolor));
 				break;
 
 		    case 'j':
-				this.squares[0] = this.game.add.sprite(this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor);
-				this.squares[1] = this.game.add.sprite(this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor);
-				this.squares[2] = this.game.add.sprite(this.centerX + this.md, this.centerY + this.md * 3, 'blocks', this.blockcolor);
-				this.squares[3] = this.game.add.sprite(this.centerX - this.md, this.centerY + this.md * 3, 'blocks', this.blockcolor);
+				this.squares[0] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor));
+				this.squares[1] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor));
+				this.squares[2] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY + this.md * 3, 'blocks', this.blockcolor));
+				this.squares[3] = this.group.add(new Sprite(this.game, this.centerX - this.md, this.centerY + this.md * 3, 'blocks', this.blockcolor));
 				break;
 
 			case 'i':
-				this.squares[0] = this.game.add.sprite(this.centerX + this.md, this.centerY - this.md * 3, 'blocks', this.blockcolor);
-				this.squares[1] = this.game.add.sprite(this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor);
-				this.squares[2] = this.game.add.sprite(this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor);
-				this.squares[3] = this.game.add.sprite(this.centerX + this.md, this.centerY + this.md * 3, 'blocks', this.blockcolor);
+				this.squares[0] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY - this.md * 3, 'blocks', this.blockcolor));
+				this.squares[1] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor));
+				this.squares[2] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor));
+				this.squares[3] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY + this.md * 3, 'blocks', this.blockcolor));
 				break;
 
 			case 's':
-				this.squares[0] = this.game.add.sprite(this.centerX + this.md * 3, this.centerY - this.md, 'blocks', this.blockcolor);
-				this.squares[1] = this.game.add.sprite(this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor);
-				this.squares[2] = this.game.add.sprite(this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor);
-				this.squares[3] = this.game.add.sprite(this.centerX - this.md, this.centerY + this.md, 'blocks', this.blockcolor);
+				this.squares[0] = this.group.add(new Sprite(this.game, this.centerX + this.md * 3, this.centerY - this.md, 'blocks', this.blockcolor));
+				this.squares[1] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor));
+				this.squares[2] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor));
+				this.squares[3] = this.group.add(new Sprite(this.game, this.centerX - this.md, this.centerY + this.md, 'blocks', this.blockcolor));
 				break;
 
 			case 'z':
-				this.squares[0] = this.game.add.sprite(this.centerX - this.md, this.centerY - this.md, 'blocks', this.blockcolor);
-				this.squares[1] = this.game.add.sprite(this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor);
-				this.squares[2] = this.game.add.sprite(this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor);
-				this.squares[3] = this.game.add.sprite(this.centerX + this.md * 3, this.centerY + this.md, 'blocks', this.blockcolor);
+				this.squares[0] = this.group.add(new Sprite(this.game, this.centerX - this.md, this.centerY - this.md, 'blocks', this.blockcolor));
+				this.squares[1] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY - this.md, 'blocks', this.blockcolor));
+				this.squares[2] = this.group.add(new Sprite(this.game, this.centerX + this.md, this.centerY + this.md, 'blocks', this.blockcolor));
+				this.squares[3] = this.group.add(new Sprite(this.game, this.centerX + this.md * 3, this.centerY + this.md, 'blocks', this.blockcolor));
 				break;
 		}
 

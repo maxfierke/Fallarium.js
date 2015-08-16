@@ -5,7 +5,7 @@ var fallarium = (function () {
 	var context = {
 		Phaser: undefined,
 		score: 0,
-		width: 400,
+		width: 800,
 		height: 600,
 		blockWidth: 30,
 		blockHeight: 30,
@@ -14,8 +14,10 @@ var fallarium = (function () {
 
 	var state = {
 		preload: function () {
-			this.stage.backgroundColor = "#000";
-			this.preloadtext = this.add.text(this.game.world.centerX,this.game.world.centerY,"Loading..."+this.load.progress+"%",{ font: "20px Arial", fill: "#ff0044", align: "center" });
+			game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    		game.scale.refresh();
+
+			this.preloadtext = this.add.text(game.world.centerX,game.world.centerY,"Loading..."+this.load.progress+"%",{ font: "20px Arial", fill: "#ff0044", align: "center" });
 			this.preloadtext.anchor.setTo(0.5,0.5);
 
 			this.load.image('logo','assets/logo.png');
@@ -28,9 +30,15 @@ var fallarium = (function () {
 			this.load.image('win','assets/win.png');
 			this.load.spritesheet('blocks','assets/blocks.png',30,30);
 			this.load.image('bck','assets/Bck.png');
+
+			this.load.script('psychedelix', 'src/filters/Psychedelix.js');
+			this.load.script('hypnosis', 'src/filters/Hypnosis.js');
+			this.load.script('gameStage', 'src/fallarium.game.js');
+			this.load.script('menus', 'src/fallarium.menus.js');
+			this.load.script('blockObj', 'src/fallarium.block.js');
 		},
 		create: function () {
-			this.game.state.start('MainMenu');
+			game.state.start('MainMenu');
 		},
 		update: function () {
 
@@ -41,7 +49,7 @@ var fallarium = (function () {
 		init: function (Phaser) {
 			context.Phaser = Phaser;
 
-			game = new Phaser.Game(context.width, context.height, Phaser.AUTO, 'fallarium', state);
+			game = new Phaser.Game(context.width, context.height, Phaser.WEBGL, 'fallarium', state);
 
 			mainMenuStage = new FallariumMainMenuStage(game, context);
 			gameStage = new FallariumGameStage(game, context);
@@ -52,7 +60,6 @@ var fallarium = (function () {
 			game.state.add('Game', gameStage);
 			game.state.add('Lose', loseStage);
 			game.state.add('Win', winStage);
-		},
-		game: game
+		}
 	};
 })();
